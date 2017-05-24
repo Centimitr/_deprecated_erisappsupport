@@ -56,17 +56,17 @@ func readErisContentFile(locator, name string) (io.ReadCloser, error) {
 	return nil, errors.New("readErisContentFile: specific file not found: " + locator + name)
 }
 
-func (d ErisDriver) readKey(b *Book) (string, error) {
+func (d ErisDriver) ReadKey(b *Book) (string, error) {
 	return "", nil
 }
 
-func (d ErisDriver) readList(b *Book) ([]string, error) {
+func (d ErisDriver) ReadList(b *Book) ([]string, error) {
 	paths := []string{}
-	fmt.Println("readList:", "ErisDriver:", "this driver should not call this method!")
+	fmt.Println("ReadList:", "ErisDriver:", "this driver should not call this method!")
 	return paths, nil
 }
 
-func (d ErisDriver) readMeta(b *Book) (m BookMeta, err error) {
+func (d ErisDriver) ReadMeta(b *Book) (m BookMeta, err error) {
 	tr, err := readErisContentFile(b.Locator, "book.json")
 	if err != nil {
 		return
@@ -79,6 +79,6 @@ func (d ErisDriver) readMeta(b *Book) (m BookMeta, err error) {
 	return
 }
 
-func (d ErisDriver) readPage(b *Book, id string) (io.ReadCloser, error) {
+func (d ErisDriver) ReadPage(b *Book, id string) (io.ReadCloser, error) {
 	return readErisContentFile(b.Locator, id)
 }

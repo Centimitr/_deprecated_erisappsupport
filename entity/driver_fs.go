@@ -11,11 +11,11 @@ import (
 type FSDriver struct {
 }
 
-func (d FSDriver) readKey(b *Book) (string, error) {
+func (d FSDriver) ReadKey(b *Book) (string, error) {
 	return "", nil
 }
 
-func (d FSDriver) readList(b *Book) (paths []string, err error) {
+func (d FSDriver) ReadList(b *Book) (paths []string, err error) {
 	filepath.Walk(b.Locator, func(path string, info os.FileInfo, err error) error {
 		if isImageSupported(path) {
 			if !info.IsDir() {
@@ -30,7 +30,7 @@ func (d FSDriver) readList(b *Book) (paths []string, err error) {
 	return
 }
 
-func (d FSDriver) readMeta(b *Book) (m BookMeta, err error) {
+func (d FSDriver) ReadMeta(b *Book) (m BookMeta, err error) {
 	data, err := ioutil.ReadFile(filepath.Join(b.Locator, "book.json"))
 	if err == nil {
 		err = json.Unmarshal(data, &m)
@@ -38,6 +38,6 @@ func (d FSDriver) readMeta(b *Book) (m BookMeta, err error) {
 	return
 }
 
-func (d FSDriver) readPage(b *Book, id string) (io.ReadCloser, error) {
+func (d FSDriver) ReadPage(b *Book, id string) (io.ReadCloser, error) {
 	return os.Open(filepath.Join(b.Locator, id))
 }

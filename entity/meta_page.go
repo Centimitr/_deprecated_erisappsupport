@@ -19,7 +19,7 @@ type PageMeta struct {
 }
 
 func (p *PageMeta) GetFile() (io.ReadCloser, error) {
-	return p.parent.driver.readPage(p.parent, p.Locator)
+	return p.parent.driver.ReadPage(p.parent, p.Locator)
 }
 
 func (p *PageMeta) Init() error {

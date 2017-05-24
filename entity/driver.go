@@ -7,10 +7,10 @@ import (
 )
 
 type Driver interface {
-	readKey(b *Book) (string, error)
-	readList(b *Book) ([]string, error)
-	readMeta(b *Book) (BookMeta, error)
-	readPage(b *Book, id string) (io.ReadCloser, error)
+	ReadKey(b *Book) (string, error)
+	ReadList(b *Book) ([]string, error)
+	ReadMeta(b *Book) (BookMeta, error)
+	ReadPage(b *Book, id string) (io.ReadCloser, error)
 }
 
 const SUPPORTED_BOOK_EXT = ".eris.rar.cbr.zip.cbz"

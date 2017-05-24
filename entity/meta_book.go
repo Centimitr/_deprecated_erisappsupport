@@ -18,7 +18,7 @@ type BookMeta struct {
 
 func (bm *BookMeta) SetPages() {
 	if len(bm.Pages) == 0 {
-		paths, _ := bm.parent.driver.readList(bm.parent)
+		paths, _ := bm.parent.driver.ReadList(bm.parent)
 		for _, p := range paths {
 			pm := PageMeta{
 				parent:  bm.parent,

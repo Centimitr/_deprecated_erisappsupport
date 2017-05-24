@@ -62,10 +62,10 @@ func (b *Book) Init(locator string) error {
 
 	// book: configure
 	b.Locator = l
-	b.Key, _ = b.driver.readKey(b)
+	b.Key, _ = b.driver.ReadKey(b)
 
 	// meta: init
-	m, err := b.driver.readMeta(b)
+	m, err := b.driver.ReadMeta(b)
 	if err != nil {
 		fmt.Println("book.json:", err)
 	}

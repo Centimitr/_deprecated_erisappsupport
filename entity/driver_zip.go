@@ -16,7 +16,7 @@ func (d ZipDriver) ensure(locator string) error {
 	return nil
 }
 
-func (d ZipDriver) readKey(b *Book) (string, error) {
+func (d ZipDriver) ReadKey(b *Book) (string, error) {
 	return "", nil
 }
 
@@ -52,7 +52,7 @@ func readZipContentFile(locator, name string) (io.ReadCloser, error) {
 	return nil, errors.New("readZipContentFile: specific file not found: " + locator + " " + name)
 }
 
-func (d ZipDriver) readList(b *Book) ([]string, error) {
+func (d ZipDriver) ReadList(b *Book) ([]string, error) {
 	paths := []string{}
 	r, err := zip.OpenReader(b.Locator)
 	if err != nil {
@@ -70,7 +70,7 @@ func (d ZipDriver) readList(b *Book) ([]string, error) {
 	return paths, nil
 }
 
-func (d ZipDriver) readMeta(b *Book) (m BookMeta, err error) {
+func (d ZipDriver) ReadMeta(b *Book) (m BookMeta, err error) {
 	tr, err := readZipContentFile(b.Locator, "book.json")
 	if err != nil {
 		return
@@ -83,6 +83,6 @@ func (d ZipDriver) readMeta(b *Book) (m BookMeta, err error) {
 	return
 }
 
-func (d ZipDriver) readPage(b *Book, id string) (io.ReadCloser, error) {
+func (d ZipDriver) ReadPage(b *Book, id string) (io.ReadCloser, error) {
 	return readZipContentFile(b.Locator, id)
 }

@@ -87,11 +87,11 @@ func tryRarKey(source string, passwords []string) (key string, err error) {
 // Driver
 type RarDriver struct{}
 
-func (d RarDriver) readKey(b *Book) (string, error) {
+func (d RarDriver) ReadKey(b *Book) (string, error) {
 	return tryRarKey(b.Locator, []string{"", "⑨", "123456", "qwertyuiop", "1234567890", "扶她奶茶"})
 }
 
-func (d RarDriver) readList(b *Book) (paths []string, err error) {
+func (d RarDriver) ReadList(b *Book) (paths []string, err error) {
 	f, err := os.Open(b.Locator)
 	if err != nil {
 		return
@@ -113,7 +113,7 @@ func (d RarDriver) readList(b *Book) (paths []string, err error) {
 	return paths, nil
 }
 
-func (d RarDriver) readMeta(b *Book) (m BookMeta, err error) {
+func (d RarDriver) ReadMeta(b *Book) (m BookMeta, err error) {
 	rr, err := readRarFile(b.Locator, "book.json", b.Key)
 	if err != nil {
 		return
@@ -125,6 +125,6 @@ func (d RarDriver) readMeta(b *Book) (m BookMeta, err error) {
 	return
 }
 
-func (d RarDriver) readPage(b *Book, locator string) (io.ReadCloser, error) {
+func (d RarDriver) ReadPage(b *Book, locator string) (io.ReadCloser, error) {
 	return readRarFile(b.Locator, locator, b.Key)
 }
