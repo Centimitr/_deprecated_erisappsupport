@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 type rarReadCloser struct {
@@ -88,7 +89,7 @@ func tryRarKey(source string, passwords []string) (key string, err error) {
 type RarDriver struct{}
 
 func (d RarDriver) ReadKey(b *Book) (string, error) {
-	return tryRarKey(b.Locator, []string{"", "⑨", "123456", "qwertyuiop", "1234567890", "扶她奶茶"})
+	return tryRarKey(b.Locator, append([]string{""}, strings.Split(b.Options.Keys, " ")...))
 }
 
 func (d RarDriver) ReadList(b *Book) (paths []string, err error) {

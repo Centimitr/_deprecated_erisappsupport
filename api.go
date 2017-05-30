@@ -21,8 +21,8 @@ func init() {
 	r.Init()
 }
 
-func (a *API) GetBook(locator string, w io.Writer) {
-	book, err := r.Get(locator)
+func (a *API) GetBook(locator string, keys string, w io.Writer) {
+	book, err := r.Get(locator, &entity.Options{Keys: keys})
 	if err != nil {
 		fmt.Println(500)
 		return
@@ -31,8 +31,8 @@ func (a *API) GetBook(locator string, w io.Writer) {
 	w.Write(content)
 }
 
-func (a *API) GetBookPage(locator string, pageLocator string, w io.Writer) {
-	book, err := r.Get(locator)
+func (a *API) GetBookPage(locator string, keys string, pageLocator string, w io.Writer) {
+	book, err := r.Get(locator, &entity.Options{Keys: keys})
 	if err != nil {
 		fmt.Println(500)
 		return

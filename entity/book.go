@@ -27,9 +27,14 @@ func trimLocator(locator string) (l string, ext string, isFs bool, err error) {
 	}
 }
 
+type Options struct {
+	Keys string
+}
+
 type Book struct {
 	Locator string
 	Meta    *BookMeta
+	Options *Options
 	Key     string
 	driver  Driver
 }
@@ -62,7 +67,10 @@ func (b *Book) Init(locator string) error {
 
 	// book: configure
 	b.Locator = l
-	b.Key, _ = b.driver.ReadKey(b)
+	b.Key, err = b.driver.ReadKey(b)
+	if err != nil {
+		return err
+	}
 
 	// meta: init
 	m, err := b.driver.ReadMeta(b)

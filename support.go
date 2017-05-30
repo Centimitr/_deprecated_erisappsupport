@@ -20,16 +20,18 @@ func main() {
 		res.Header().Set("Content-Type", "text/json; charset=utf-8")
 		req.ParseForm()
 		locator := req.Form.Get("locator")
+		keys := req.Form.Get("keys")
 
-		api.GetBook(locator, res)
+		api.GetBook(locator, keys, res)
 	})
 	http.HandleFunc("/book/page", func(res http.ResponseWriter, req *http.Request) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		req.ParseForm()
 		locator := req.Form.Get("locator")
+		keys := req.Form.Get("keys")
 		page := req.Form.Get("page")
 
-		api.GetBookPage(locator, page, res)
+		api.GetBookPage(locator, keys, page, res)
 	})
 	http.HandleFunc("/pack", func(res http.ResponseWriter, req *http.Request) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
@@ -40,11 +42,21 @@ func main() {
 
 		api.MakeErisFromFolder(path, dst)
 	})
+
+	// port config
 	port := 3455
 	if len(os.Args) > 1 {
 		port, _ = strconv.Atoi(os.Args[1])
 	}
-	log.Fatal(http.ListenAndServe(fmt.Sprintf("127.0.0.1:%d", port), nil))
+
+	// http2 cert and key
+	certFile := createTempFile("com.devbycm.eris.support", _TLS_CERT)
+	keyFile := createTempFile("com.devbycm.eris.support", _TLS_KEY)
+	defer os.Remove(certFile)
+	defer os.Remove(keyFile)
+
+	//log.Fatal(http.ListenAndServe(fmt.Sprintf("127.0.0.1:%d", port), nil))
+	log.Fatal(http.ListenAndServeTLS(fmt.Sprintf("127.0.0.1:%d", port), certFile, keyFile, nil))
 }
 
 //func mainx() {
