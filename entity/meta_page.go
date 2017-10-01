@@ -13,9 +13,9 @@ type PageMeta struct {
 	Locator string
 	SubBook string
 
-	Type   string
-	Width  int
-	Height int
+	//Type   string
+	//Width  int
+	//Height int
 }
 
 func (p *PageMeta) GetFile() (io.ReadCloser, error) {

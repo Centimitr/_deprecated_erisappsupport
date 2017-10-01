@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
+	"erisapp.com/entity"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -25,11 +28,20 @@ func main() {
 		api.GetBook(locator, keys, res)
 	})
 	http.HandleFunc("/book/page", func(res http.ResponseWriter, req *http.Request) {
+		//toUint := func(s string, defaultValue uint) uint {
+		//	i, err := strconv.Atoi(s)
+		//	if err != nil || i < 0 {
+		//		return defaultValue
+		//	}
+		//	return uint(i)
+		//}
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		req.ParseForm()
 		locator := req.Form.Get("locator")
 		keys := req.Form.Get("keys")
 		page := req.Form.Get("page")
+		//mw := toUint(req.Form.Get("maxWidth"), 100000)
+		//mh := toUint(req.Form.Get("maxHeight"), 100000)
 
 		api.GetBookPage(locator, keys, page, res)
 	})
@@ -37,10 +49,24 @@ func main() {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Content-Type", "text/json; charset=utf-8")
 		req.ParseForm()
-		path := req.Form.Get("path")
-		dst := req.Form.Get("dst")
+		//fmt.Println(req.Form)
+		//dst := req.Form.Get("dst")
+		//bmj := req.Form.Get("bookMeta")
+		body, err := ioutil.ReadAll(req.Body)
+		fmt.Println(body)
+		if err != nil {
+			fmt.Println("req body", err)
+		}
+		defer req.Body.Close()
+		b := struct {
+			Dst      string
+			BookMeta *entity.BookMeta
+		}{}
+		json.Unmarshal(body, &b)
+		fmt.Println(b)
 
-		api.MakeErisFromFolder(path, dst)
+		//api.MakeErisFromFolder(path, dst)
+		api.PackErisFile(b.BookMeta, b.Dst)
 	})
 
 	// port config
@@ -50,8 +76,8 @@ func main() {
 	}
 
 	// http2 cert and key
-	certFile := createTempFile("com.devbycm.eris.support", _TLS_CERT)
-	keyFile := createTempFile("com.devbycm.eris.support", _TLS_KEY)
+	certFile := createTempFile("com.devbycm.eris.support", []byte(_TLS_CERT))
+	keyFile := createTempFile("com.devbycm.eris.support", []byte(_TLS_KEY))
 	defer os.Remove(certFile)
 	defer os.Remove(keyFile)
 

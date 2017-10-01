@@ -5,13 +5,13 @@ import (
 	"log"
 )
 
-func createTempFile(name string, content string) string {
+func createTempFile(name string, content []byte) string {
 	tmp, err := ioutil.TempFile("", name)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if _, err := tmp.Write([]byte(content)); err != nil {
+	if _, err := tmp.Write(content); err != nil {
 		log.Fatal(err)
 	}
 	if err := tmp.Close(); err != nil {

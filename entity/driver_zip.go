@@ -44,7 +44,7 @@ func readZipContentFile(locator, name string) (io.ReadCloser, error) {
 		return nil, err
 	}
 	for _, f := range rc.File {
-		if f.Name == name {
+		if f.FileInfo().Name() == name {
 			frc, err := f.Open()
 			return wrapReadCloser{frc, rc}, err
 		}
@@ -63,7 +63,7 @@ func (d ZipDriver) ReadList(b *Book) ([]string, error) {
 	for _, f := range r.File {
 		i := f.FileInfo()
 		name := i.Name()
-		if err == nil && !i.IsDir() && !strings.HasPrefix(name, "._") && isImageSupported(name) {
+		if err == nil && !i.IsDir() && !strings.HasPrefix(name, ".") && isImageSupported(name) {
 			paths = append(paths, name)
 		}
 	}
